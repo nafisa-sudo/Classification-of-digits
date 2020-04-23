@@ -1,0 +1,51 @@
+#Classification of digits from MNIST dataset using SVM.
+
+import numpy as np
+from sklearn.svm import LinearSVC
+#import sklearn.svm.LinearSVC
+
+
+try:
+    from sklearn.datasets import fetch_openml
+    mnist = fetch_openml('mnist_784', version=1, cache=True)
+except ImportError:
+    from sklearn.datasets import fetch_mldata
+    mnist = fetch_mldata('MNIST original')
+
+X = mnist["data"]
+y = mnist["target"]
+
+
+X_train = X[:60000]
+y_train = y[:60000]
+X_test = X[60000:]
+y_test = y[60000:]
+
+np.random.seed(42)
+rnd_idx = np.random.permutation(60000)
+X_train = X_train[rnd_idx]
+y_train = y_train[rnd_idx]
+
+lin_clf = LinearSVC(random_state=42)
+lin_clf.fit(X_train, y_train)
+
+
+from sklearn.metrics import accuracy_score
+import sklearn.preprocessing.StandardScalar
+
+
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train.astype(np.float32))
+X_test_scaled = scaler.transform(X_test.astype(np.float32))
+
+lin_clf = LinearSVC(random_state=42)
+lin_clf.fit(X_train_scaled, y_train)
+print(y_pred = lin_clf.predict(X_train_scaled))
+accuracy_score(y_train, y_pred)
+svm_clf = SVC(decision_function_shape="ovr", gamma="auto")
+svm_clf.fit(X_train_scaled[:10000], y_train[:10000])
+y_pred = svm_clf.predict(X_train_scaled)
+accuracy_score(y_train, y_pred)
+y_pred = rnd_search_cv.best_estimator_.predict(X_train_scaled)
+accuracy_score(y_train, y_pred)
+
